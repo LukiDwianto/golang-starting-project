@@ -1,0 +1,22 @@
+# Start from the official Golang base image
+FROM golang:1.22.5-alpine
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+COPY go.mod . 
+COPY go.sum .
+
+RUN go mod download
+
+COPY . .
+
+# Install air
+RUN go install github.com/air-verse/air@latest
+
+
+# Build the Go app
+RUN go build -o main .
+
+# Command to run wait-for-it and then air for live reloading
+CMD [ "air"]
